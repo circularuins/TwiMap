@@ -43,7 +43,7 @@ public class TweetObj {
             Resources r = context.getResources();
             Bitmap bitmap = BitmapFactory.decodeResource(r, R.drawable.notfound);
             //プロフィールURLから画像を取得
-            // TODO: ここがボトルネックになっている可能性があるので、検証し、対処する
+            // TODO: ここがボトルネックになっているので、対処する
             String urlString = tweet.profileImage;
             try {
                 //URLクラス
