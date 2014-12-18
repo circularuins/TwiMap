@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialogbg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/twName"
+        android:text="hogehoge"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/twName"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/notfound"
+        android:id="@+id/twImg"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/twName"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/twLoc"
+        android:text="hogehoge"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/twLoc"
+        android:layout_centerHorizontal="true"
+        android:text="hogehoge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/twFol"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/twFol"
+        android:layout_centerHorizontal="true"
+        android:text="hogehoge"
+        android:background="#ffffff"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/twText"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/twText"
+        android:layout_centerHorizontal="true"
+        android:text="hogehoge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/twDate"/>
+
+</RelativeLayout>
