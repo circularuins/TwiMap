@@ -17,7 +17,7 @@ public class Tweet implements Parcelable {
     public final String longitude;
     public final String latitude;
     public final String date;
-    public int markerId;
+    public int markerId = -1; //緯度経度情報のないツイートを区別するための初期値をセット
     public Bitmap bitmap;
     public final String location;
     public final String followers;

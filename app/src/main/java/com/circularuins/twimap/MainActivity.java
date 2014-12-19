@@ -191,20 +191,23 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         if(data != null) {
             for (final Tweet tweet : data.tweetList) {
 
-                LatLng pos = new LatLng(Double.parseDouble(tweet.latitude), Double.parseDouble(tweet.longitude));
-                Marker marker = mMap.addMarker(new MarkerOptions()
-                        .position(pos)
-                        .title("@" + tweet.screenName)
-                        .snippet(tweet.date)
-                        .icon(BitmapDescriptorFactory.fromBitmap(tweet.bitmap))
-                        .infoWindowAnchor(0.5f, 0.5f));
+                //緯度経度情報のないツイートのみ地図にマークする
+                if (!(tweet.latitude.equals("0.0") && tweet.longitude.equals("0.0"))) {
+                    LatLng pos = new LatLng(Double.parseDouble(tweet.latitude), Double.parseDouble(tweet.longitude));
+                    Marker marker = mMap.addMarker(new MarkerOptions()
+                            .position(pos)
+                            .title("@" + tweet.screenName)
+                            .snippet(tweet.date)
+                            .icon(BitmapDescriptorFactory.fromBitmap(tweet.bitmap))
+                            .infoWindowAnchor(0.5f, 0.5f));
 
-                //マーカーidをtweetObjに保存
-                String id = marker.getId(); //"m0", "m14"といった文字列が取得される
-                int num = Integer.parseInt(id.substring(2-1)); //idの２文字目から後を取り出す
-                tweet.markerId = num;
+                    //マーカーidをtweetObjに保存
+                    String id = marker.getId(); //"m0", "m14"といった文字列が取得される
+                    int num = Integer.parseInt(id.substring(2 - 1)); //idの２文字目から後を取り出す
+                    tweet.markerId = num;
 
-                markerList.add(marker);
+                    markerList.add(marker);
+                }
             }
 
             //マーカークリックで、ツイート内容表示
@@ -218,7 +221,6 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                     //マーカーIDが一致するTweetオブジェクトを探し出し、ダイアログに渡して表示する
                     for (int i = 0; i < data.tweetList.size(); i++) {
                         if(data.tweetList.get(i).markerId == numClicked) {
-                            //Toast.makeText(getApplicationContext(), "" + data.tweetList.get(i).markerId, Toast.LENGTH_LONG).show();
                             // AlertDialogFragmentの呼び出し
                             TweetDialogFragment dialog = TweetDialogFragment.newInstance(data.tweetList.get(i));
                             dialog.show(getFragmentManager(), "dialog");
@@ -234,7 +236,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
             boolean cameraMove = false;
             if(data.tweetList.size() > 0) {
                 for(Tweet tw : data.tweetList) {
-                    if(!tw.latitude.equals("0.0") && !tw.longitude.equals("0.0")) {
+                    if (!(tw.latitude.equals("0.0") && tw.longitude.equals("0.0"))) {
                         LatLng pos = new LatLng(Double.parseDouble(tw.latitude), Double.parseDouble(tw.longitude));
                         CameraPosition cp =
                                 new CameraPosition.Builder().target(pos)
