@@ -44,6 +44,7 @@ public class TweetObj {
             Bitmap bitmap = BitmapFactory.decodeResource(r, R.drawable.notfound);
             //プロフィールURLから画像を取得
             // TODO: ここがボトルネックになっているので、対処する
+            // TODO: Volleyを使うと、読み込み速度が上がるし、キャッシュもしてくれる
             String urlString = tweet.profileImage;
             try {
                 //URLクラス

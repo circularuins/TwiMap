@@ -90,6 +90,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         textView = (TextView)findViewById(R.id.tv_main);
+        // TODO: NavigationDrawerを使うように変更する
         editSearch = (EditText)findViewById(R.id.editSearch);
         btnSearch = (Button)findViewById(R.id.btnSearch);
 

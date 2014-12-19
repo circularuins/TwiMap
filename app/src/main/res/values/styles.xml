@@ -5,10 +5,16 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="TransparentDialogTheme" parent="@android:style/Theme.Light">
+    <!-- タイトル無し、背景透明、アニメーション指定 -->
+    <style name="Theme.CustomDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.CustomDialog</item>
     </style>
-    <color name="dialogbg">#a0909090</color>
+    <!-- ウィンドウアニメーションスタイル -->
+    <style name="Animation.CustomDialog" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/options_panel_enter</item>
+        <item name="android:windowExitAnimation">@anim/options_panel_exit</item>
+    </style>
 
 </resources>

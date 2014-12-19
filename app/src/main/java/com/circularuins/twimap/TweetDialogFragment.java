@@ -3,13 +3,12 @@ package com.circularuins.twimap;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,28 +39,14 @@ public class TweetDialogFragment extends DialogFragment {
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity(), R.style.TransparentDialogTheme);
-        //ダイアログの背景を完全に透過
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //フルスクリーンでダイアログを表示
-        //dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+
+        //タイトル
+        dialog.setTitle("Tweet");
+        //ダイアログ外タップで消えないように設定
+        //dialog.setCanceledOnTouchOutside(true);
 
         return dialog;
-
-        /*String text = getArguments().getString("text");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //builder.setTitle("タイトル");
-        builder.setMessage(text);
-        builder.setPositiveButton("閉じる",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //
-                    }
-                });
-
-        return builder.create();*/
     }
 
     @Nullable
@@ -77,7 +62,7 @@ public class TweetDialogFragment extends DialogFragment {
         String date = getArguments().getString("date");
 
         //Viewの取得
-        View content = inflater.inflate(R.layout.tweetdialog, null);
+        View content = inflater.inflate(R.layout.customdialog, null);
 
         //各内容の表示処理
         ImageView twImg = (ImageView)content.findViewById(R.id.twImg);
@@ -86,6 +71,7 @@ public class TweetDialogFragment extends DialogFragment {
         TextView twFol = (TextView)content.findViewById(R.id.twFol);
         TextView twText = (TextView)content.findViewById(R.id.twText);
         TextView twDate = (TextView)content.findViewById(R.id.twDate);
+        Button btnOK = (Button) content.findViewById(R.id.btnOK);
 
         twImg.setImageBitmap(image);
         twName.setText("@" + name);
@@ -93,7 +79,21 @@ public class TweetDialogFragment extends DialogFragment {
         twFol.setText("フォロワー：" + fol + "人");
         twText.setText(text);
         twDate.setText(date);
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss(); //ダイアログを閉じる
+            }
+        });
 
         return content;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //カスタムのスタイルを適用する
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.Theme_CustomDialog);
     }
 }
