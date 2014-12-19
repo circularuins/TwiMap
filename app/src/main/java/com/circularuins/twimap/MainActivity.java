@@ -282,7 +282,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
             //ツイートデータの復元
             int num = savedInstanceState.getInt("numResult");
             ArrayList<Tweet> tweetlist = savedInstanceState.getParcelableArrayList("tweetList");
-            if(num != 0 && tweetlist != null) {
+            if (tweetlist != null) {
                 restoreTweet = new TweetObj(num, tweetlist);
             }
         }
