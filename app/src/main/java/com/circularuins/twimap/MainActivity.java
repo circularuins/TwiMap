@@ -60,13 +60,13 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.show();
+            progressDialog.show(); //プログレスダイアログの表示
         }
 
         @Override
         protected void onPostExecute(TweetObj data) {
             super.onPostExecute(data);
-            progressDialog.hide();
+            progressDialog.hide(); //プログレスダイアログの非表示
 
             //ツイートデータのメンバ変数への保存
             tweetData = null;
@@ -94,6 +94,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         editSearch = (EditText)findViewById(R.id.editSearch);
         btnSearch = (Button)findViewById(R.id.btnSearch);
 
+        //「検索中」のプログレスダイアログのセット
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("検索中");
