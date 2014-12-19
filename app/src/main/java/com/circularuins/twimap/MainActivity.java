@@ -41,6 +41,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
     private TweetObj restoreTweet;
     private boolean isRotate = false;
 
+    //googleマップ関連変数
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
     private ArrayList<Marker> markerList = new ArrayList<Marker>(); //マーカー削除のために保存する
@@ -51,6 +52,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                     .bearing(0)
                     .build();
 
+    //AsyncTaskの拡張インナークラス
     private class GetSearchTask extends GetSearchApiTask {
 
         private GetSearchTask(Context context) {
