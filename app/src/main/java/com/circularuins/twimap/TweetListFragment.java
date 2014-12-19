@@ -32,7 +32,7 @@ public class TweetListFragment extends ListFragment {
         //ユーザー名だけリストアップしてみるテスト
         List<String> alist = new ArrayList<String>();
         for (Tweet tweet : tweetList) {
-            alist.add(tweet.screenName + "\n" + tweet.text);
+            alist.add("@" + tweet.screenName + "\n" + tweet.text);
         }
         setListAdapter(new ArrayAdapter<String>(
                 getActivity(),
