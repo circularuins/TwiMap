@@ -1,5 +1,6 @@
 package com.circularuins.twimap;
 
+import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -41,6 +42,9 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
     private TweetObj restoreTweet;
     private boolean isRotate = false;
 
+    //リストビュー関連変数
+    private boolean mTwoPane; // 画面の縦横判定フラグ
+
     //googleマップ関連変数
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
@@ -81,6 +85,22 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                 textView.setText("地図検索:" + data.numResult + "件");
             } else if(exception != null) {
                 Toast.makeText(MainActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            //横表示の時のリストビューの表示
+            View tweetListFrame = findViewById(R.id.tweetsList);
+            //image表示用のフレームレイアウトが表示されていない（すなわち縦表示の時）、mTwoPaneはfalse
+            mTwoPane = tweetListFrame != null &&
+                    tweetListFrame.getVisibility() == View.VISIBLE;
+
+            //横表示の時、フレームレイアウトをフラグメントで置き換える
+            if (mTwoPane) {
+                TweetListFragment fragment = TweetListFragment.newInstance(tweetData);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.tweetsList, fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+
+                ft.commit();
             }
         }
     }
@@ -133,6 +153,22 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 
             tweetData = restoreTweet; //メンバ変数にツイートデータを保存
             isRotate = true; //画面回転したフラグ
+        }
+
+        //横表示の時のリストビューの表示
+        View tweetListFrame = findViewById(R.id.tweetsList);
+        //image表示用のフレームレイアウトが表示されていない（すなわち縦表示の時）、mTwoPaneはfalse
+        mTwoPane = tweetListFrame != null &&
+                tweetListFrame.getVisibility() == View.VISIBLE;
+
+        //横表示の時、フレームレイアウトをフラグメントで置き換える
+        if (mTwoPane && tweetData != null) {
+            TweetListFragment fragment = TweetListFragment.newInstance(tweetData);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.tweetsList, fragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+
+            ft.commit();
         }
     }
 
