@@ -26,6 +26,7 @@ public class TweetDialogFragment extends DialogFragment {
         Bundle arguments = new Bundle();
         //ツイート内容をBundleに保存する
         arguments.putString("name", tweet.screenName);
+        arguments.putString("user", tweet.userName);
         arguments.putString("loc", tweet.location);
         arguments.putString("fol", tweet.followers);
         arguments.putString("text", tweet.text);
@@ -56,6 +57,7 @@ public class TweetDialogFragment extends DialogFragment {
         //ビットマップはparcelableで変換して取得する
         Bitmap image = getArguments().getParcelable("image");
         String name = getArguments().getString("name");
+        String user = getArguments().getString("user");
         String loc = getArguments().getString("loc");
         String fol = getArguments().getString("fol");
         String text = getArguments().getString("text");
@@ -67,6 +69,7 @@ public class TweetDialogFragment extends DialogFragment {
         //各内容の表示処理
         ImageView twImg = (ImageView)content.findViewById(R.id.twImg);
         TextView twName = (TextView)content.findViewById(R.id.twName);
+        TextView twUser = (TextView) content.findViewById(R.id.twUser);
         TextView twLoc = (TextView)content.findViewById(R.id.twLoc);
         TextView twFol = (TextView)content.findViewById(R.id.twFol);
         TextView twText = (TextView)content.findViewById(R.id.twText);
@@ -75,6 +78,7 @@ public class TweetDialogFragment extends DialogFragment {
 
         twImg.setImageBitmap(image);
         twName.setText("@" + name);
+        twUser.setText("(" + user + ")");
         twLoc.setText("地域：" + loc);
         twFol.setText("フォロワー：" + fol + "人");
         twText.setText(text);
