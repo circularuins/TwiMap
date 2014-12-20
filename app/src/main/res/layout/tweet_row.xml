@@ -41,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rowText"
+        android:layout_alignParentRight="true"
         android:text="date"
         android:textAppearance="?android:attr/textAppearance"
         android:id="@+id/rowDate" />
