@@ -6,13 +6,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +48,11 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 
     //リストビュー関連変数
     private boolean mTwoPane; // 画面の縦横判定フラグ
+
+    //ナビゲーションドロワー関連変数
+    private String[] mDrawerTitles = {"キーワード検索", "現在地検索"};
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
 
     //googleマップ関連変数
     private GoogleMap mMap;
@@ -115,6 +124,19 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         // TODO: NavigationDrawerを使うように変更する
         editSearch = (EditText)findViewById(R.id.editSearch);
         btnSearch = (Button)findViewById(R.id.btnSearch);
+
+        //ナビゲーションドロワー
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.list_drawer);
+        mDrawerList.setAdapter(
+                new ArrayAdapter<String>(this, R.layout.drawer_text, mDrawerTitles));
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getBaseContext(), "" + id, Toast.LENGTH_SHORT).show();
+                // TODO: 検索用のダイアログを実装する
+            }
+        });
 
         //「検索中」のプログレスダイアログのセット
         progressDialog = new ProgressDialog(MainActivity.this);
