@@ -61,7 +61,7 @@ public class TweetObj {
             tweet.bitmap = bitmap;
 
             //正しい位置情報を持つツイートのカウント
-            if(!tweet.latitude.equals("0.0") && !tweet.longitude.equals("0.0")) cnt++;
+            if (!(tweet.latitude.equals("0.0") && tweet.longitude.equals("0.0"))) cnt++;
 
             tweetList.add(tweet);
         }

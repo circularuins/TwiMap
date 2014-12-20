@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  * Created by wake on 2014/12/19.
  */
 public class TweetListFragment extends ListFragment {
+    private ArrayList<Tweet> tweetList;
     private TweetAdapter adapter;
 
     //ファクトリーメソッド
@@ -31,11 +33,11 @@ public class TweetListFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayList<Tweet> tweetList = getArguments().getParcelableArrayList("tweets");
+        tweetList = getArguments().getParcelableArrayList("tweets");
         ArrayList<RowModel> list = new ArrayList<RowModel>();
 
         for (Tweet tweet : tweetList) {
-            list.add(new RowModel(tweet.bitmap, tweet.screenName, tweet.text, tweet.date));
+            list.add(new RowModel(tweet.bitmap, tweet.id, tweet.screenName, tweet.text, tweet.date));
         }
 
         adapter = new TweetAdapter(list);
@@ -87,23 +89,33 @@ public class TweetListFragment extends ListFragment {
      */
     class RowModel {
         Bitmap image;
+        String id;
         String name;
         String text;
         String date;
 
-        RowModel(Bitmap image, String name, String text, String date) {
+        RowModel(Bitmap image, String id, String name, String text, String date) {
             this.image = image;
+            this.id = id;
             this.name = name;
             this.text = text;
             this.date = date;
         }
+    }
 
-        /*public String toString() {
-            if(rating >= 3.0) {
-                //大文字にする（元データは変更されない）
-                return (label.toUpperCase());
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        RowModel model = getModel(position);
+        //ツイートIDが一致するTweetオブジェクトを探し出し、ダイアログに渡して表示する
+        for (int i = 0; i < tweetList.size(); i++) {
+            if (tweetList.get(i).id.equals(model.id)) {
+                // AlertDialogFragmentの呼び出し
+                TweetDialogFragment dialog = TweetDialogFragment.newInstance(tweetList.get(i));
+                dialog.show(getFragmentManager(), "dialog");
+                break;
             }
-            return (label);
-        }*/
+        }
     }
 }
