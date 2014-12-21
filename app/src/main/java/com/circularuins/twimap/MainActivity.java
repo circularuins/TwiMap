@@ -108,6 +108,9 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 
                 ft.commit();
             }
+
+            //検索終了したらナビゲーションドロワーを閉じる
+            mDrawerLayout.closeDrawers();
         }
     }
 
