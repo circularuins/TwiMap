@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -114,6 +115,23 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         }
     }
 
+    //AsyncTaskを実行するメソッド
+    private void executeSearchTask(String keyword) {
+        if (!keyword.equals("")) {
+            new GetSearchTask(this).execute(keyword);
+        }
+    }
+
+    //dialog fragmentが閉じられた時のコールバック
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //requestCode=37で返ってくる
+        if (requestCode == 37) {
+            String keyword = data.getStringExtra("keyword");
+            //AsyncTaskでツイートの取得を行う
+            executeSearchTask(keyword);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,11 +148,14 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         mDrawerList = (ListView) findViewById(R.id.list_drawer);
         mDrawerList.setAdapter(
                 new ArrayAdapter<String>(this, R.layout.drawer_text, mDrawerTitles));
+        //リストアイテムのクリックリスナー
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(), "" + id, Toast.LENGTH_SHORT).show();
-                // TODO: 検索用のダイアログを実装する
+                // AlertDialogFragmentの呼び出し
+                SearchDialogFragment dialog = SearchDialogFragment.newInstance(position);
+                dialog.setTargetFragment(null, 37); // requestCodeを37に指定
+                dialog.show(getFragmentManager(), "dialog");
             }
         });
 
@@ -144,6 +165,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         progressDialog.setTitle("検索中");
         progressDialog.setMessage("しばらくお待ち下さい");
 
+        // TODO: ナビゲーションドロワーでの検索実行後消す
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

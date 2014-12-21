@@ -64,7 +64,7 @@ public class TweetDialogFragment extends DialogFragment {
         String date = getArguments().getString("date");
 
         //Viewの取得
-        View content = inflater.inflate(R.layout.customdialog, null);
+        View content = inflater.inflate(R.layout.tweet_dialog, null);
 
         //各内容の表示処理
         ImageView twImg = (ImageView)content.findViewById(R.id.twImg);
