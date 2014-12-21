@@ -15,8 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +36,6 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<TweetObj>, OnMapReadyCallback {
 
     private TextView textView;
-    private EditText editSearch;
-    private Button btnSearch;
 
     private ProgressDialog progressDialog;
 
@@ -138,10 +134,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView)findViewById(R.id.tv_main);
-        // TODO: NavigationDrawerを使うように変更する
-        editSearch = (EditText)findViewById(R.id.editSearch);
-        btnSearch = (Button)findViewById(R.id.btnSearch);
+        textView = (TextView)findViewById(R.id.tv_main); //検索数表示用
 
         //ナビゲーションドロワー
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -165,19 +158,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         progressDialog.setTitle("検索中");
         progressDialog.setMessage("しばらくお待ち下さい");
 
-        // TODO: ナビゲーションドロワーでの検索実行後消す
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("keyWord", editSearch.getText().toString());
-
-                //LoaderManegerの初期化
-                //getLoaderManager().initLoader(0, bundle, MainActivity.this); //AsyncTaskLoader利用
-                new GetSearchTask(MainActivity.this).execute(editSearch.getText().toString()); //AsyncTask利用
-            }
-        });
-
+        //googleマップの初期化
         mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

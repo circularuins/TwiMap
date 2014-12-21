@@ -9,29 +9,10 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ll">
-
-            <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/editSearch" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnSearch"
-                android:text="検索" />
-        </LinearLayout>
-
         <TextView
             android:id="@+id/tv_main"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ll" />
+            android:layout_height="wrap_content" />
 
         <fragment
             android:id="@+id/map"
