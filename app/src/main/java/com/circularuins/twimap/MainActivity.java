@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
+import com.circularuins.twimap.volley.utils.LruBitmapCache;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +53,10 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     private String[] mDrawerTitles = {"キーワード検索", "現在地検索"};
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+
+    //Volley関連の変数
+    private RequestQueue mQueue;
+    private ImageLoader imageLoader;
 
     //googleマップ関連変数
     private GoogleMap mMap;
@@ -163,6 +173,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mMap = mapFragment.getMap(); //ここで初期化しておかないとNullPointExceptionになる
+
+        //queue for imageLoader
+        mQueue = Volley.newRequestQueue(this);
     }
 
     @Override
@@ -215,23 +228,63 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         if(data != null) {
             for (final Tweet tweet : data.tweetList) {
+                /*
+                * 初めて画像を読み込む場合はvolleyでネットから。
+                * それ以降は、tweetオブジェクトから読み込む。
+                */
+                if (tweet.bitmap != null) {
+                    //緯度経度情報のないツイートのみ地図にマークする
+                    if (!(tweet.latitude.equals("0.0") && tweet.longitude.equals("0.0"))) {
+                        LatLng pos = new LatLng(Double.parseDouble(tweet.latitude), Double.parseDouble(tweet.longitude));
+                        Marker marker = mMap.addMarker(new MarkerOptions()
+                                .position(pos)
+                                .title("@" + tweet.screenName)
+                                .snippet(tweet.date)
+                                .icon(BitmapDescriptorFactory.fromBitmap(tweet.bitmap))
+                                .infoWindowAnchor(0.5f, 0.5f));
 
-                //緯度経度情報のないツイートのみ地図にマークする
-                if (!(tweet.latitude.equals("0.0") && tweet.longitude.equals("0.0"))) {
-                    LatLng pos = new LatLng(Double.parseDouble(tweet.latitude), Double.parseDouble(tweet.longitude));
-                    Marker marker = mMap.addMarker(new MarkerOptions()
-                            .position(pos)
-                            .title("@" + tweet.screenName)
-                            .snippet(tweet.date)
-                            .icon(BitmapDescriptorFactory.fromBitmap(tweet.bitmap))
-                            .infoWindowAnchor(0.5f, 0.5f));
+                        //マーカーidをtweetObjに保存
+                        String id = marker.getId(); //"m0", "m14"といった文字列が取得される
+                        int num = Integer.parseInt(id.substring(2 - 1)); //idの２文字目から後を取り出す
+                        tweet.markerId = num;
 
-                    //マーカーidをtweetObjに保存
-                    String id = marker.getId(); //"m0", "m14"といった文字列が取得される
-                    int num = Integer.parseInt(id.substring(2 - 1)); //idの２文字目から後を取り出す
-                    tweet.markerId = num;
+                        markerList.add(marker);
+                    }
+                } else {
+                    imageLoader = new ImageLoader(mQueue, new LruBitmapCache());
+                    imageLoader.get(tweet.profileImage, new ImageLoader.ImageListener() {
 
-                    markerList.add(marker);
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("VOLLEY", "Image Load Error: " + error.getMessage());
+                        }
+
+                        @Override
+                        public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
+                            if (response.getBitmap() != null) {
+                                //緯度経度情報のないツイートのみ地図にマークする
+                                if (!(tweet.latitude.equals("0.0") && tweet.longitude.equals("0.0"))) {
+                                    LatLng pos = new LatLng(Double.parseDouble(tweet.latitude), Double.parseDouble(tweet.longitude));
+                                    Marker marker = mMap.addMarker(new MarkerOptions()
+                                            .position(pos)
+                                            .title("@" + tweet.screenName)
+                                            .snippet(tweet.date)
+                                            .icon(BitmapDescriptorFactory.fromBitmap(response.getBitmap()))
+                                            .infoWindowAnchor(0.5f, 0.5f));
+
+                                    //マーカーidをtweetObjに保存
+                                    String id = marker.getId(); //"m0", "m14"といった文字列が取得される
+                                    int num = Integer.parseInt(id.substring(2 - 1)); //idの２文字目から後を取り出す
+                                    tweet.markerId = num;
+
+                                    markerList.add(marker);
+                                }
+                                //該当のTweetオブジェクトにBitmapをセット
+                                tweet.bitmap = response.getBitmap();
+
+                            }
+                        }
+                    });
                 }
             }
 
@@ -247,7 +300,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                     for (int i = 0; i < data.tweetList.size(); i++) {
                         if(data.tweetList.get(i).markerId == numClicked) {
                             // AlertDialogFragmentの呼び出し
-                            TweetDialogFragment dialog = TweetDialogFragment.newInstance(data.tweetList.get(i));
+                            TweetDialogFragment dialog = TweetDialogFragment.newInstance(data.tweetList.get(i), data.tweetList);
                             dialog.show(getFragmentManager(), "dialog");
                             break;
                         }
