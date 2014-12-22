@@ -1,15 +1,12 @@
 package com.circularuins.twimap;
 
 import android.app.FragmentTransaction;
-import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<TweetObj>, OnMapReadyCallback {
+public class MainActivity extends ActionBarActivity implements OnMapReadyCallback {
 
     private TextView textView;
 
@@ -316,32 +313,6 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                 restoreTweet = new TweetObj(num, tweetlist);
             }
         }
-    }
-
-    @Override
-    public Loader<TweetObj> onCreateLoader(int id, Bundle args) {
-        //Loaderを初期化する
-        ApiLoader loader = new ApiLoader(this, args.getString("keyWord", ""));
-        return loader;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<TweetObj> loader, TweetObj data) {
-        // dataでは、Loderクラスの戻り値が返される
-        if(data != null) {
-            //textView.setText(data);
-        } else if(data != null) {
-            Toast.makeText(MainActivity.this, "データの読み込みに失敗しました", Toast.LENGTH_SHORT).show();
-        }
-
-        Log.d("", "onLoadFinished");
-    }
-
-    @Override
-    public void onLoaderReset(Loader<TweetObj> loader) {
-        // Loderが、リセットされるときに呼ばれる。
-        // ここで、もらっているdataを破棄する必要がある。
-        Log.d("","onLoaderReset");
     }
 
     @Override
