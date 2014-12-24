@@ -27,6 +27,7 @@ public class TweetListFragment extends ListFragment {
     //Volley関連の変数
     private RequestQueue mQueue;
     private ImageLoader imageLoader;
+    private ViewHolder holder; //innerclassで使用するので、メンバ変数にしておく
 
     //ファクトリーメソッド
     public static TweetListFragment newInstance(TweetObj tweetObj) {
@@ -77,7 +78,7 @@ public class TweetListFragment extends ListFragment {
             }
 
             //holderパターンを使用して高速化を狙う
-            ViewHolder holder = (ViewHolder) row.getTag();
+            holder = (ViewHolder) row.getTag();
             //その入れ物が空かどうか確認する
             if (holder == null) {
                 //各行内の個別のオブジェクトの参照を一度だけfindViewByIdする
@@ -90,12 +91,6 @@ public class TweetListFragment extends ListFragment {
             if (model.image != null) {
                 holder.image.setImageBitmap(model.image);
             } else {
-                //画像を非同期に読み込んで、ImageViewにセットする
-                ImageLoader.ImageListener listener = ImageLoader.getImageListener(
-                        holder.image, R.drawable.notfound, R.drawable.notfound);
-                imageLoader.get(model.url, listener);
-                // TODO: 上の処理と統合して1回のリクエストに抑えたい
-                //もう一度読み込んで、Tweetオブジェクトにも保存する（自前キャッシュ）
                 imageLoader.get(model.url, new ImageLoader.ImageListener() {
 
                     @Override
@@ -106,6 +101,8 @@ public class TweetListFragment extends ListFragment {
                     @Override
                     public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
                         if (response.getBitmap() != null) {
+                            //画像を非同期に読み込んで、ImageViewにセットする
+                            holder.image.setImageBitmap(response.getBitmap());
                             //該当のTweetオブジェクトにBitmapをセット
                             for (Tweet tweet : tweetList) {
                                 if (model.id.equals(tweet.id)) tweet.bitmap = response.getBitmap();
