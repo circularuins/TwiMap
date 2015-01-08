@@ -51,7 +51,7 @@ public class TweetListFragment extends ListFragment {
         ArrayList<RowModel> list = new ArrayList<RowModel>();
 
         for (Tweet tweet : tweetList) {
-            list.add(new RowModel(tweet.bitmap, tweet.profileImage, tweet.id, tweet.screenName, tweet.text, tweet.date));
+            list.add(new RowModel(tweet.bitmap, tweet.imageUrl, tweet.tweetId, tweet.screenName, tweet.text, tweet.date));
         }
 
         adapter = new TweetAdapter(list);
@@ -88,6 +88,10 @@ public class TweetListFragment extends ListFragment {
             final RowModel model = getModel(position);
             //holder.image.setTag(new Integer(position));
 
+            /*
+             * 初めて画像を読み込む場合はvolleyでネットから。
+             * それ以降は、tweetオブジェクトから読み込む。
+            */
             if (model.image != null) {
                 holder.image.setImageBitmap(model.image);
             } else {
@@ -105,7 +109,8 @@ public class TweetListFragment extends ListFragment {
                             holder.image.setImageBitmap(response.getBitmap());
                             //該当のTweetオブジェクトにBitmapをセット
                             for (Tweet tweet : tweetList) {
-                                if (model.id.equals(tweet.id)) tweet.bitmap = response.getBitmap();
+                                if (model.id.equals(tweet.tweetId))
+                                    tweet.bitmap = response.getBitmap();
                             }
                         }
                     }
@@ -149,7 +154,7 @@ public class TweetListFragment extends ListFragment {
         RowModel model = getModel(position);
         //ツイートIDが一致するTweetオブジェクトを探し出し、ダイアログに渡して表示する
         for (int i = 0; i < tweetList.size(); i++) {
-            if (tweetList.get(i).id.equals(model.id)) {
+            if (tweetList.get(i).tweetId.equals(model.id)) {
                 // AlertDialogFragmentの呼び出し
                 TweetDialogFragment dialog = TweetDialogFragment.newInstance(tweetList.get(i), tweetList);
                 dialog.show(getFragmentManager(), "dialog");

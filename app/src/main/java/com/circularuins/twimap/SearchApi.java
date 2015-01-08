@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 public class SearchApi {
 
     private static final String USER_AGENT = "TwiMap Client";
-    private static final String URL = "http://circularuins.com:8080/demo/twitter/search/";
+    private static final String URL = "http://circularuins.com:8080/twitter/search/";
 
     public static TweetObj getTweet(Context context, String keyWord)
             throws IOException, JSONException {

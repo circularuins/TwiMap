@@ -161,6 +161,8 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                 dialog.show(getFragmentManager(), "dialog");
             }
         });
+        //DrawerLayoutに影をセットする
+        //mDrawerLayout.setDrawerShadow(R.drawable.powered_by_google_light, GravityCompat.START);
 
         //「検索中」のプログレスダイアログのセット
         progressDialog = new ProgressDialog(MainActivity.this);
@@ -252,7 +254,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                     }
                 } else {
                     imageLoader = new ImageLoader(mQueue, new LruBitmapCache());
-                    imageLoader.get(tweet.profileImage, new ImageLoader.ImageListener() {
+                    imageLoader.get(tweet.imageUrl, new ImageLoader.ImageListener() {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {

@@ -37,14 +37,14 @@ public class TweetDialogFragment extends DialogFragment {
 
         Bundle arguments = new Bundle();
         //ツイート内容をBundleに保存する
-        arguments.putString("id", tweet.id);
+        arguments.putString("id", tweet.tweetId);
         arguments.putString("name", tweet.screenName);
         arguments.putString("user", tweet.userName);
         arguments.putString("loc", tweet.location);
         arguments.putString("fol", tweet.followers);
         arguments.putString("text", tweet.text);
         arguments.putString("date", tweet.date);
-        arguments.putString("url", tweet.profileImage);
+        arguments.putString("url", tweet.imageUrl);
         //ビットマップは、parcelableで変換して保存する
         arguments.putParcelable("image", tweet.bitmap);
         arguments.putParcelableArrayList("tweetList", tweetList);
@@ -119,7 +119,7 @@ public class TweetDialogFragment extends DialogFragment {
                         twImg.setImageBitmap(response.getBitmap());
                         //該当のTweetオブジェクトにBitmapをセット
                         for (Tweet tweet : tweetList) {
-                            if (id.equals(tweet.id)) tweet.bitmap = response.getBitmap();
+                            if (id.equals(tweet.tweetId)) tweet.bitmap = response.getBitmap();
                         }
                     }
                 }
