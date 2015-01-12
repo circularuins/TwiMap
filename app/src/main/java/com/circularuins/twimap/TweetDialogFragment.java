@@ -2,7 +2,9 @@ package com.circularuins.twimap;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -45,6 +47,7 @@ public class TweetDialogFragment extends DialogFragment {
         arguments.putString("text", tweet.text);
         arguments.putString("date", tweet.date);
         arguments.putString("url", tweet.imageUrl);
+        arguments.putString("tweetUrl", tweet.tweetUrl);
         //ビットマップは、parcelableで変換して保存する
         arguments.putParcelable("image", tweet.bitmap);
         arguments.putParcelableArrayList("tweetList", tweetList);
@@ -82,6 +85,7 @@ public class TweetDialogFragment extends DialogFragment {
         String fol = getArguments().getString("fol");
         String text = getArguments().getString("text");
         String date = getArguments().getString("date");
+        final String tweetUrl = getArguments().getString("tweetUrl");
         final ArrayList<Tweet> tweetList = getArguments().getParcelableArrayList("tweetList");
 
         //Viewの取得
@@ -133,6 +137,22 @@ public class TweetDialogFragment extends DialogFragment {
         twFol.setText("フォロワー：" + fol + "人");
         twText.setText(text);
         twDate.setText(date);
+        twImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(tweetUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+        twText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse(tweetUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
