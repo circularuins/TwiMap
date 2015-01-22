@@ -1,7 +1,6 @@
 package com.circularuins.twimap;
 
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +39,8 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     private TextView textView;
 
-    private ProgressDialog progressDialog;
+    //    private ProgressDialog progressDialog;
+    private CustumProgressDialogFragment custumProgressDialogFragment;
 
     private TweetObj tweetData; //画面回転時のテータ保存用
     private TweetObj restoreTweet;
@@ -79,13 +79,17 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog.show(); //プログレスダイアログの表示
+            //progressDialog.show(); //プログレスダイアログの表示
+            //自作プログレスダイアログの表示
+            custumProgressDialogFragment = custumProgressDialogFragment.newInstance();
+            custumProgressDialogFragment.show(getFragmentManager(), "dialog");
         }
 
         @Override
         protected void onPostExecute(TweetObj data) {
             super.onPostExecute(data);
-            progressDialog.hide(); //プログレスダイアログの非表示
+            //progressDialog.hide(); //プログレスダイアログの非表示
+            custumProgressDialogFragment.dismiss(); //自作プログレスダイアログの非表示
 
             //ツイートデータのメンバ変数への保存
             tweetData = null;
@@ -165,10 +169,10 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         //mDrawerLayout.setDrawerShadow(R.drawable.powered_by_google_light, GravityCompat.START);
 
         //「検索中」のプログレスダイアログのセット
-        progressDialog = new ProgressDialog(MainActivity.this);
+        /*progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle("検索中");
-        progressDialog.setMessage("しばらくお待ち下さい");
+        progressDialog.setMessage("しばらくお待ち下さい");*/
 
         //googleマップの初期化
         mapFragment =
